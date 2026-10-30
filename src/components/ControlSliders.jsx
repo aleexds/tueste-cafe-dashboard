@@ -1,4 +1,5 @@
 
+
 export const ControlSliders = ({ params, setParams, onSetScenario }) => {
   const handleChange = (key, value) => {
     setParams(prev => ({
@@ -9,60 +10,66 @@ export const ControlSliders = ({ params, setParams, onSetScenario }) => {
 
   const containerStyle = {
     backgroundColor: '#ffffff',
-    padding: '1.25rem',
-    borderRadius: '0.75rem',
-    border: '1px solid #e5e7eb',
-    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-    marginBottom: '1.5rem'
+    padding: '1.5rem',
+    borderRadius: '1rem',
+    border: '1px solid #e8ded2',
+    boxShadow: '0 4px 15px rgba(84, 61, 55, 0.05)',
+    marginBottom: '1.75rem'
   };
 
-  const buttonStyle = (bg, color) => ({
-    padding: '0.5rem 0.9rem',
-    borderRadius: '0.375rem',
+  const buttonStyle = (bg, color, border = 'none') => ({
+    padding: '0.55rem 1rem',
+    borderRadius: '0.5rem',
     fontSize: '0.8125rem',
-    fontWeight: '600',
-    border: 'none',
+    fontWeight: '700',
+    border: border,
     cursor: 'pointer',
     backgroundColor: bg,
     color: color,
     marginRight: '0.5rem',
-    marginBottom: '0.5rem'
+    marginBottom: '0.5rem',
+    transition: 'all 0.2s ease'
   });
 
   const rowStyle = {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-    gap: '1rem',
-    marginTop: '1rem'
+    gap: '1.25rem',
+    marginTop: '1.25rem'
   };
 
   const labelContainer = {
     display: 'flex',
     justifyContent: 'space-between',
     fontSize: '0.8125rem',
-    fontWeight: '500',
-    color: '#374151',
-    marginBottom: '0.25rem'
+    fontWeight: '600',
+    color: '#543d37',
+    marginBottom: '0.35rem'
   };
 
   return (
     <div style={containerStyle}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
-        <h3 style={{ fontSize: '1rem', fontWeight: '700', color: '#111827', margin: 0 }}>
-          Controles del Modelo (Rúbrica Nivel 2)
-        </h3>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
         <div>
-          <button onClick={() => onSetScenario('hoy')} style={buttonStyle('#2563eb', '#ffffff')}>
+          <h3 style={{ fontSize: '1.05rem', fontWeight: '800', color: '#231714', margin: 0 }}>
+            Controles del Modelo Financiero
+          </h3>
+          <span style={{ fontSize: '0.78rem', color: '#7d6e68' }}>
+            Ajuste de variables unitarias y simulación de escenarios
+          </span>
+        </div>
+        <div>
+          <button onClick={() => onSetScenario('hoy')} style={buttonStyle('#543d37', '#ffffff')}>
             Hoy ($8k)
           </button>
-          <button onClick={() => onSetScenario('agencia')} style={buttonStyle('#dc2626', '#ffffff')}>
+          <button onClick={() => onSetScenario('agencia')} style={buttonStyle('#991b1b', '#ffffff')}>
             Agencia ($16k -30%)
           </button>
-          <button onClick={() => onSetScenario('propuesta')} style={buttonStyle('#16a34a', '#ffffff')}>
+          <button onClick={() => onSetScenario('propuesta')} style={buttonStyle('#c27847', '#ffffff')}>
             Propuesta Óptima ($4k)
           </button>
-          <button onClick={() => onSetScenario('reset')} style={buttonStyle('#f3f4f6', '#374151')}>
-            Restablecer a Datos del Caso
+          <button onClick={() => onSetScenario('reset')} style={buttonStyle('#f5ece1', '#543d37', '1px solid #e8ded2')}>
+            Restablecer Caso
           </button>
         </div>
       </div>
@@ -72,7 +79,7 @@ export const ControlSliders = ({ params, setParams, onSetScenario }) => {
         <div>
           <div style={labelContainer}>
             <span>Inversión en Meta ($)</span>
-            <strong>${params.inversionMeta.toLocaleString()}</strong>
+            <strong style={{ color: '#c27847' }}>${params.inversionMeta.toLocaleString()}</strong>
           </div>
           <input
             type="range"
@@ -89,7 +96,7 @@ export const ControlSliders = ({ params, setParams, onSetScenario }) => {
         <div>
           <div style={labelContainer}>
             <span>Precio bolsa 340g ($)</span>
-            <strong>${params.precioBolsa.toFixed(2)}</strong>
+            <strong style={{ color: '#231714' }}>${params.precioBolsa.toFixed(2)}</strong>
           </div>
           <input
             type="range"
@@ -106,7 +113,7 @@ export const ControlSliders = ({ params, setParams, onSetScenario }) => {
         <div>
           <div style={labelContainer}>
             <span>Costo café por bolsa ($)</span>
-            <strong>${params.costoCafeBolsa.toFixed(2)}</strong>
+            <strong style={{ color: '#231714' }}>${params.costoCafeBolsa.toFixed(2)}</strong>
           </div>
           <input
             type="range"
@@ -123,7 +130,7 @@ export const ControlSliders = ({ params, setParams, onSetScenario }) => {
         <div>
           <div style={labelContainer}>
             <span>Costo de Envío ($)</span>
-            <strong>${params.costoEnvio.toFixed(2)}</strong>
+            <strong style={{ color: '#231714' }}>${params.costoEnvio.toFixed(2)}</strong>
           </div>
           <input
             type="range"
@@ -140,7 +147,9 @@ export const ControlSliders = ({ params, setParams, onSetScenario }) => {
         <div>
           <div style={labelContainer}>
             <span>Descuento 1er Pedido</span>
-            <strong>{(params.descuentoPrimerPedido * 100).toFixed(0)}%</strong>
+            <strong style={{ color: params.descuentoPrimerPedido > 0 ? '#991b1b' : '#231714' }}>
+              {(params.descuentoPrimerPedido * 100).toFixed(0)}%
+            </strong>
           </div>
           <input
             type="range"
@@ -157,7 +166,7 @@ export const ControlSliders = ({ params, setParams, onSetScenario }) => {
         <div>
           <div style={labelContainer}>
             <span>% Mix Suscriptores</span>
-            <strong>{(params.pctSuscripcion * 100).toFixed(0)}%</strong>
+            <strong style={{ color: '#231714' }}>{(params.pctSuscripcion * 100).toFixed(0)}%</strong>
           </div>
           <input
             type="range"
@@ -174,7 +183,7 @@ export const ControlSliders = ({ params, setParams, onSetScenario }) => {
         <div>
           <div style={labelContainer}>
             <span>Cancelación mensual (Churn)</span>
-            <strong>{(params.churnMensual * 100).toFixed(1)}%</strong>
+            <strong style={{ color: '#231714' }}>{(params.churnMensual * 100).toFixed(1)}%</strong>
           </div>
           <input
             type="range"
@@ -190,8 +199,8 @@ export const ControlSliders = ({ params, setParams, onSetScenario }) => {
         {/* 8. Pedidos en 12m cliente suelto */}
         <div>
           <div style={labelContainer}>
-            <span>Pedidos en 12m (Suelto)</span>
-            <strong>{params.pedidosSuelto12m.toFixed(1)} pedidos</strong>
+            <span>Pedidos 12m (Suelto)</span>
+            <strong style={{ color: '#231714' }}>{params.pedidosSuelto12m.toFixed(1)} pedidos</strong>
           </div>
           <input
             type="range"
@@ -208,7 +217,7 @@ export const ControlSliders = ({ params, setParams, onSetScenario }) => {
         <div>
           <div style={labelContainer}>
             <span>Fee Agencia ($)</span>
-            <strong>${params.feeAgencia.toLocaleString()}</strong>
+            <strong style={{ color: '#231714' }}>${params.feeAgencia.toLocaleString()}</strong>
           </div>
           <input
             type="range"

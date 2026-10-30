@@ -4,7 +4,7 @@ import { ControlSliders } from '../components/ControlSliders';
 import { ChartsSection } from '../components/ChartsSection';
 import { Simulator24m } from '../components/Simulator24m';
 
-// Historial de inversión vs clientes nuevos (Sección 5 del caso)
+// Historial real de inversión vs clientes nuevos (Sección 5 del caso)
 const HISTORIAL_META = [
   { inv: 0, clients: 0 },
   { inv: 4000, clients: 100 },
@@ -17,7 +17,6 @@ const HISTORIAL_META = [
 const FRECUENCIAS_SUELTOS = [0, 1.0, 0.15, 0.20, 0.20, 0.20, 0.20, 0.20, 0.15, 0.15, 0.15, 0.20, 0.20];
 
 export const DashboardPage = () => {
-  // Parámetros completos solicitados por la rúbrica del Nivel 2
   const [params, setParams] = useState({
     inversionMeta: 8000,
     precioBolsa: 17.0,
@@ -85,7 +84,7 @@ export const DashboardPage = () => {
       feeAgencia
     } = params;
 
-    // 1. Clientes nuevos con interpolación lineal y CAC Marginal
+    // 1. Clientes nuevos con interpolación lineal y CAC Marginal por tramo
     let clientesMeta = 0;
     let cacMarginal = 0;
 
@@ -107,26 +106,26 @@ export const DashboardPage = () => {
     const costoAdquisicion = inversionMeta + (inversionMeta > 0 ? feeAgencia : 0);
     const cacReal = clientesMeta > 0 ? costoAdquisicion / clientesMeta : 0;
 
-    // 3. Márgenes unitarios por pedido (2 bolsas)
+    // 3. Márgenes unitarios por pedido de 2 bolsas
     const precioBase2B = precioBolsa * 2;
     const costoCafe2B = costoCafeBolsa * 2;
     const empaque = 1.20;
 
-    // Pedido suelto primer pedido
+    // Pedido suelto inicial (con o sin descuento de primer pedido)
     const precioSueltoM1 = precioBase2B * (1 - descuentoPrimerPedido);
     const pasarelaSueltoM1 = precioSueltoM1 * 0.045;
     const mcSueltoM1 = precioSueltoM1 - (costoCafe2B + costoEnvio + pasarelaSueltoM1 + empaque);
 
-    // Pedido suelto normal recurrente
+    // Pedido suelto recurrente normal
     const pasarelaSueltoNormal = precioBase2B * 0.045;
     const mcSueltoNormal = precioBase2B - (costoCafe2B + costoEnvio + pasarelaSueltoNormal + empaque);
 
-    // Pedido suscripción (10% de descuento sobre precio de lista)
+    // Pedido recurrente de suscripción (10% descuento continuo)
     const precioSub = precioBase2B * 0.90;
     const pasarelaSub = precioSub * 0.045;
     const mcSub = precioSub - (costoCafe2B + costoEnvio + pasarelaSub + empaque);
 
-    // Métricas del primer pedido para tarjeta principal
+    // Métricas del primer pedido
     const mcDolar = mcSueltoM1;
     const mcPct = (mcDolar / precioSueltoM1) * 100;
     const roasBreakEven = mcPct > 0 ? 1 / (mcPct / 100) : 0;
@@ -186,27 +185,77 @@ export const DashboardPage = () => {
   }, [params]);
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '1280px', margin: '0 auto', fontFamily: 'system-ui, sans-serif', backgroundColor: '#f9fafb', minHeight: '100vh' }}>
-      <header style={{ marginBottom: '1.5rem' }}>
-        <h1 style={{ fontSize: '1.75rem', fontWeight: '800', color: '#111827', margin: '0 0 0.5rem 0' }}>
-          Tueste Café · Tablero de Unit Economics (Nivel 2)
-        </h1>
-        <p style={{ color: '#6b7280', margin: 0, fontSize: '0.95rem' }}>
-          Simulador interactivo en vivo vinculado al modelo financiero DTC.
-        </p>
-      </header>
+    <div style={{ backgroundColor: '#fcf9f5', minHeight: '100vh', paddingBottom: '3rem' }}>
+      {/* Barra de navegación temática de cafetería */}
+      <nav style={{
+        backgroundColor: '#231714',
+        borderBottom: '2px solid #c27847',
+        padding: '1rem 2rem',
+        color: '#fdfbf7',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <div style={{
+            width: '38px',
+            height: '38px',
+            borderRadius: '50%',
+            backgroundColor: '#c27847',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '1.2rem',
+            fontWeight: '800',
+            color: '#ffffff'
+          }}>
+            ☕
+          </div>
+          <div>
+            <span style={{ fontSize: '1.3rem', fontWeight: '800', letterSpacing: '0.05em', color: '#fcf9f5' }}>
+              TUESTE
+            </span>
+            <span style={{ fontSize: '0.75rem', marginLeft: '0.6rem', color: '#d7c2b5', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+              Café de Especialidad · 340g
+            </span>
+          </div>
+        </div>
+        <div style={{
+          fontSize: '0.8rem',
+          backgroundColor: 'rgba(255,255,255,0.08)',
+          padding: '0.4rem 0.9rem',
+          borderRadius: '9999px',
+          border: '1px solid rgba(194, 120, 71, 0.4)',
+          color: '#e8ded2'
+        }}>
+          Direct-to-Consumer (DTC) Model
+        </div>
+      </nav>
 
-      {/* Controles y Sliders */}
-      <ControlSliders params={params} setParams={setParams} onSetScenario={handleSetScenario} />
+      {/* Área de trabajo */}
+      <main style={{ maxWidth: '1280px', margin: '0 auto', padding: '2rem 1.5rem' }}>
+        <header style={{ marginBottom: '1.75rem' }}>
+          <h1 style={{ fontSize: '1.85rem', fontWeight: '800', color: '#231714', margin: '0 0 0.4rem 0' }}>
+            Tablero de Decisiones y Unit Economics
+          </h1>
+          <p style={{ color: '#7d6e68', margin: 0, fontSize: '0.95rem' }}>
+            Simulación financiera en tiempo real para optimización de pauta publicitaria y flujo de caja.
+          </p>
+        </header>
 
-      {/* Tarjetas de Métricas Clave (8 números exigidos) */}
-      <MetricCards metrics={metrics} />
+        {/* 1. Controles deslizantes */}
+        <ControlSliders params={params} setParams={setParams} onSetScenario={handleSetScenario} />
 
-      {/* Sección de Gráficos */}
-      <ChartsSection metrics={metrics} />
+        {/* 2. Tarjetas con métricas unitarias */}
+        <MetricCards metrics={metrics} />
 
-      {/* Simulador de Caja a 24 Meses (Nivel 3) */}
-      <Simulator24m />
+        {/* 3. Gráficos analíticos */}
+        <ChartsSection metrics={metrics} />
+
+        {/* 4. Simulador a 24 Meses (Nivel 3) */}
+        <Simulator24m />
+      </main>
     </div>
   );
 };
