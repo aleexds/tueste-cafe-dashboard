@@ -24,6 +24,13 @@ ChartJS.register(
   Legend
 );
 
+const formatUsd = (amount, maximumFractionDigits = 0) =>
+  new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits
+  }).format(amount);
+
 export const ChartsSection = ({ metrics }) => {
   // 1. Datos para la Curva de Caja acumulada (Mes 0 a Mes 12)
   const meses = Array.from({ length: 13 }, (_, i) => `Mes ${i}`);
@@ -31,7 +38,7 @@ export const ChartsSection = ({ metrics }) => {
     labels: meses,
     datasets: [
       {
-        label: 'Caja Acumulada por Cliente ($)',
+        label: 'Caja Acumulada por Cliente (USD)',
         data: metrics.curvaCaja,
         borderColor: '#2563eb',
         backgroundColor: 'rgba(37, 99, 235, 0.1)',
@@ -63,7 +70,7 @@ export const ChartsSection = ({ metrics }) => {
 
   // 3. Datos para LTV vs CAC Real
   const dataLtvCac = {
-    labels: ['CAC Real ($)', 'LTV 12m Ponderado ($)'],
+    labels: ['CAC Real (USD)', 'LTV 12m Ponderado (USD)'],
     datasets: [
       {
         label: 'Comparativa Unitaria',
@@ -99,7 +106,21 @@ export const ChartsSection = ({ metrics }) => {
             options={{
               responsive: true,
               maintainAspectRatio: false,
-              plugins: { legend: { position: 'bottom' } }
+              plugins: {
+                legend: { position: 'bottom' },
+                tooltip: {
+                  callbacks: {
+                    label: (context) => `${context.dataset.label}: ${formatUsd(context.parsed.y, 2)}`
+                  }
+                }
+              },
+              scales: {
+                y: {
+                  ticks: {
+                    callback: (value) => formatUsd(value)
+                  }
+                }
+              }
             }}
           />
         </div>
@@ -114,7 +135,14 @@ export const ChartsSection = ({ metrics }) => {
             options={{
               responsive: true,
               maintainAspectRatio: false,
-              plugins: { legend: { display: false } }
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label: (context) => `${context.label}: ${context.parsed.y.toFixed(2)}x`
+                  }
+                }
+              }
             }}
           />
         </div>
@@ -129,7 +157,21 @@ export const ChartsSection = ({ metrics }) => {
             options={{
               responsive: true,
               maintainAspectRatio: false,
-              plugins: { legend: { display: false } }
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label: (context) => `${context.label}: ${formatUsd(context.parsed.y, 2)}`
+                  }
+                }
+              },
+              scales: {
+                y: {
+                  ticks: {
+                    callback: (value) => formatUsd(value)
+                  }
+                }
+              }
             }}
           />
         </div>

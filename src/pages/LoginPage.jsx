@@ -9,8 +9,8 @@ import {
   ShieldCheck,
   UserRound
 } from 'lucide-react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { signIn } from '../auth';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { getCurrentUser, signIn } from '../auth';
 import './LoginPage.css';
 
 export const LoginPage = () => {
@@ -18,20 +18,25 @@ export const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
-  const location = useLocation();
   const navigate = useNavigate();
-  const destination = location.state?.from?.pathname || '/dashboard';
+  const currentUser = getCurrentUser();
+
+  if (currentUser) {
+    return <Navigate to={currentUser.role === 'admin' ? '/dashboard' : '/cliente'} replace />;
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (!signIn(username, password)) {
+    const user = signIn(username, password);
+
+    if (!user) {
       setError('El usuario o la contraseña no son correctos. Inténtalo de nuevo.');
       return;
     }
 
     setError('');
-    navigate(destination, { replace: true });
+    navigate(user.role === 'admin' ? '/dashboard' : '/cliente', { replace: true });
   };
 
   return (
@@ -55,10 +60,10 @@ export const LoginPage = () => {
           <div className="login-heading">
             <span className="login-eyebrow">
               <span className="login-eyebrow-dot" />
-              UN ESPACIO PARA EL EQUIPO
+              TU ESPACIO EN TUESTE
             </span>
             <h1>Qué gusto verte.</h1>
-            <p>Inicia sesión para continuar a tu espacio de trabajo.</p>
+            <p>Inicia sesión para continuar a tu espacio personal.</p>
           </div>
 
           <form className="login-form" onSubmit={handleSubmit}>
@@ -124,7 +129,7 @@ export const LoginPage = () => {
             <ShieldCheck size={17} />
             <p>
               <strong>Acceso de demostración</strong>
-              <span>Esta cuenta de prueba es solo para la maqueta.</span>
+              <span>Acceso para clientes y equipo Tueste.</span>
             </p>
           </div>
         </div>
@@ -139,7 +144,7 @@ export const LoginPage = () => {
         <div className="login-visual-overlay" />
         <div className="login-visual-topline">
           <span>BUEN CAFÉ, BUENAS IDEAS</span>
-          <span>CDMX · DESDE 2024</span>
+          <span>SEATTLE, WA · SINCE 2024</span>
         </div>
         <div className="login-visual-quote">
           <span className="login-quote-mark">“</span>

@@ -11,12 +11,18 @@ const HISTORIAL_META = [
 ];
 
 const FRECUENCIAS = [0, 1.0, 0.15, 0.20, 0.20, 0.20, 0.20, 0.20, 0.15, 0.15, 0.15, 0.20, 0.20, ...Array(12).fill(0.10)];
+const formatUsd = (amount) =>
+  new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0
+  }).format(Number(amount));
 
 const PLANS_DEFINITION = {
-  plan1: { id: 'plan1', name: 'Plan 1: Hoy ($8k fijos)', investments: Array(24).fill(8000), descBF: false },
-  plan2: { id: 'plan2', name: 'Plan 2: Agencia ($16k + -30%)', investments: Array(24).fill(16000), descBF: true },
-  plan3: { id: 'plan3', name: 'Plan 3: Propio A ($4k fijos - Óptimo)', investments: Array(24).fill(4000), descBF: false },
-  plan4: { id: 'plan4', name: 'Plan 4: Propio B (Escalonado $4k-$6k)', investments: [...Array(6).fill(4000), ...Array(18).fill(6000)], descBF: false }
+  plan1: { id: 'plan1', name: 'Plan 1: Hoy ($8k USD fijos)', investments: Array(24).fill(8000), descBF: false },
+  plan2: { id: 'plan2', name: 'Plan 2: Agencia ($16k USD + -30%)', investments: Array(24).fill(16000), descBF: true },
+  plan3: { id: 'plan3', name: 'Plan 3: Propio A ($4k USD fijos - Óptimo)', investments: Array(24).fill(4000), descBF: false },
+  plan4: { id: 'plan4', name: 'Plan 4: Propio B (Escalonado $4k-$6k USD)', investments: [...Array(6).fill(4000), ...Array(18).fill(6000)], descBF: false }
 };
 
 const interpolate = (inv) => {
@@ -124,7 +130,7 @@ export const Simulator24m = () => {
     labels: Array.from({ length: 25 }, (_, i) => `Mes ${i}`),
     datasets: [
       {
-        label: `Caja en Banco: ${selectedSimulation.name} ($)`,
+        label: `Caja en Banco: ${selectedSimulation.name} (USD)`,
         data: selectedSimulation.historyCash,
         borderColor: selectedSimulation.brokeFloor ? '#b91c1c' : '#c27847',
         backgroundColor: selectedSimulation.brokeFloor ? 'rgba(185, 28, 28, 0.1)' : 'rgba(194, 120, 71, 0.15)',
@@ -133,7 +139,7 @@ export const Simulator24m = () => {
         pointRadius: 3
       },
       {
-        label: 'Piso de Seguridad ($5.000)',
+        label: 'Piso de Seguridad ($5,000 USD)',
         data: Array(25).fill(5000),
         borderColor: '#991b1b',
         borderDash: [6, 6],
@@ -156,7 +162,7 @@ export const Simulator24m = () => {
           Simulador de Flujo de Caja a 24 Meses (Nivel 3)
         </h2>
         <p style={{ color: '#7d6e68', fontSize: '0.85rem', margin: '0.3rem 0 0 0' }}>
-          Modelado de cohortes mes a mes. Saldo inicial: <strong>$35.000</strong> | Piso de seguridad: <strong>$5.000</strong>
+          Modelado de cohortes mes a mes. Saldo inicial: <strong>$35,000 USD</strong> | Piso de seguridad: <strong>$5,000 USD</strong>
         </p>
       </header>
 
@@ -173,8 +179,8 @@ export const Simulator24m = () => {
               <th style={{ padding: '0.75rem' }}>Mes Mínimo</th>
               <th style={{ padding: '0.75rem' }}>Caja Mes 24</th>
               <th style={{ padding: '0.75rem' }}>Suscriptores (M24)</th>
-              <th style={{ padding: '0.75rem' }}>¿Rompe Piso ($5k)?</th>
-              <th style={{ padding: '0.75rem' }}>¿2da Tostadora ($14k)?</th>
+              <th style={{ padding: '0.75rem' }}>¿Rompe Piso ($5k USD)?</th>
+              <th style={{ padding: '0.75rem' }}>¿2da Tostadora ($14k USD)?</th>
             </tr>
           </thead>
           <tbody>
@@ -187,11 +193,11 @@ export const Simulator24m = () => {
                   {p.name}
                 </td>
                 <td style={{ padding: '0.7rem', fontWeight: '600', color: p.brokeFloor ? '#991b1b' : '#231714' }}>
-                  ${Number(p.minCash).toLocaleString()}
+                  {formatUsd(p.minCash)}
                 </td>
                 <td style={{ padding: '0.7rem' }}>Mes {p.minMonth}</td>
                 <td style={{ padding: '0.7rem', fontWeight: '700', color: p.endCash < 0 ? '#991b1b' : '#2e7d32' }}>
-                  ${Number(p.endCash).toLocaleString()}
+                  {formatUsd(p.endCash)}
                 </td>
                 <td style={{ padding: '0.7rem', fontWeight: '600' }}>{p.endSubs}</td>
                 <td style={{ padding: '0.7rem', fontWeight: '700', color: p.brokeFloor ? '#991b1b' : '#2e7d32' }}>
@@ -295,7 +301,7 @@ export const Simulator24m = () => {
               <th style={{ padding: '0.55rem' }}>Contrib. Nuevos</th>
               <th style={{ padding: '0.55rem' }}>Salidas Totales</th>
               <th style={{ padding: '0.55rem' }}>Caja Final</th>
-              <th style={{ padding: '0.55rem', textAlign: 'center' }}>Alerta (&lt;$5k)</th>
+              <th style={{ padding: '0.55rem', textAlign: 'center' }}>Alerta (&lt;$5k USD)</th>
             </tr>
           </thead>
           <tbody>
@@ -307,17 +313,17 @@ export const Simulator24m = () => {
                 <td style={{ padding: '0.5rem', textAlign: 'center', fontWeight: '600', color: '#231714' }}>
                   Mes {r.month}
                 </td>
-                <td style={{ padding: '0.5rem' }}>${Number(r.inv).toLocaleString()}</td>
+                <td style={{ padding: '0.5rem' }}>{formatUsd(r.inv)}</td>
                 <td style={{ padding: '0.5rem' }}>{r.totalNew}</td>
-                <td style={{ padding: '0.5rem' }}>${Number(r.contribBase).toLocaleString()}</td>
-                <td style={{ padding: '0.5rem' }}>${Number(r.contribCohorts).toLocaleString()}</td>
-                <td style={{ padding: '0.5rem' }}>${Number(r.outflows).toLocaleString()}</td>
+                <td style={{ padding: '0.5rem' }}>{formatUsd(r.contribBase)}</td>
+                <td style={{ padding: '0.5rem' }}>{formatUsd(r.contribCohorts)}</td>
+                <td style={{ padding: '0.5rem' }}>{formatUsd(r.outflows)}</td>
                 <td style={{
                   padding: '0.5rem',
                   fontWeight: '700',
                   color: r.isDanger ? '#991b1b' : '#231714'
                 }}>
-                  ${Number(r.endCash).toLocaleString()}
+                  {formatUsd(r.endCash)}
                 </td>
                 <td style={{
                   padding: '0.5rem',

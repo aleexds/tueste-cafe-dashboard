@@ -220,7 +220,7 @@ export const DashboardPage = () => {
               TUESTE
             </span>
             <span style={{ fontSize: '0.75rem', marginLeft: '0.6rem', color: '#d7c2b5', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-              Café de Especialidad · 340g
+              Café de Especialidad · 340g · Seattle, WA
             </span>
           </div>
         </div>
@@ -233,7 +233,7 @@ export const DashboardPage = () => {
             border: '1px solid rgba(194, 120, 71, 0.4)',
             color: '#e8ded2'
           }}>
-            Direct-to-Consumer (DTC) Model
+            USD · Direct-to-Consumer (DTC) Model
           </div>
           <button
             onClick={() => {

@@ -18,7 +18,7 @@ const products = [
     name: 'Flat white de la casa',
     category: 'ESPRESSO · LECHE SEDOSA',
     description: 'Doble espresso de la casa con leche cremosa y un toque dulce.',
-    price: '$68',
+    price: '$5.50',
     badge: 'EL FAVORITO',
     image:
       'https://images.unsplash.com/photo-1570968915860-54d5c301fa9f?auto=format&fit=crop&w=900&q=80',
@@ -28,7 +28,7 @@ const products = [
     name: 'V60 de temporada',
     category: 'MÉTODOS · ORIGEN INVITADO',
     description: 'Café de origen, preparado al momento para disfrutar cada nota.',
-    price: '$85',
+    price: '$6.50',
     badge: 'DE ORIGEN',
     image:
       'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=900&q=80',
@@ -38,7 +38,7 @@ const products = [
     name: 'Roll de canela',
     category: 'PANADERÍA · HORNEADO HOY',
     description: 'Masa suave, canela aromática y glaseado ligero.',
-    price: '$58',
+    price: '$4.50',
     badge: 'RECIÉN HORNEADO',
     image:
       'https://images.unsplash.com/photo-1509365465985-25d11c17e812?auto=format&fit=crop&w=900&q=80',
@@ -50,10 +50,10 @@ const reviews = [
   {
     quote: 'El flat white está buenísimo y el lugar invita a quedarte un rato más.',
     name: 'Mariana R.',
-    detail: 'Vecina de la Roma'
+    detail: 'Vecina de Capitol Hill'
   },
   {
-    quote: 'Me recomendaron un café de Veracruz y ahora es mi parada de cada sábado.',
+    quote: 'Me recomendaron un café de Colombia y ahora es mi parada de cada sábado.',
     name: 'Diego M.',
     detail: 'Viene por su V60'
   },
@@ -97,7 +97,7 @@ export const LandingPage = () => (
       <div className="landing-hero-copy">
         <div className="landing-eyebrow">
           <span className="landing-eyebrow-dot" />
-          CAFÉ DE ESPECIALIDAD · COLONIA ROMA
+          CAFÉ DE ESPECIALIDAD · CAPITOL HILL
         </div>
         <h1>
           Un buen café
@@ -121,7 +121,7 @@ export const LandingPage = () => (
           <span className="landing-proof-icon">
             <Clock3 size={17} />
           </span>
-          <span>Todos los días · café servido con calma desde las 8:00.</span>
+          <span>Todos los días · café servido con calma desde las 7:00 AM.</span>
         </div>
       </div>
 
@@ -130,7 +130,7 @@ export const LandingPage = () => (
         <div className="landing-photo-caption">
           <span>CAFÉ, PAN Y BUENA COMPAÑÍA</span>
           <span className="landing-caption-rule" />
-          <span>ROMA NORTE · CDMX</span>
+          <span>SEATTLE · WASHINGTON</span>
         </div>
         <div className="landing-insight-card">
           <div className="landing-insight-top">
@@ -144,9 +144,9 @@ export const LandingPage = () => (
           <div className="landing-insight-divider" />
           <div className="landing-insight-bottom">
             <span>ABRIMOS</span>
-            <b>8:00 — 20:00</b>
+            <b>7:00 AM — 6:00 PM</b>
           </div>
-          <small>Te esperamos en la Roma Norte</small>
+          <small>Te esperamos en Capitol Hill, Seattle</small>
         </div>
         <div className="landing-photo-tag">
           <span className="landing-tag-dot" />
@@ -194,7 +194,7 @@ export const LandingPage = () => (
         ))}
       </div>
       <p className="landing-menu-note">
-        Precios en MXN. Pregúntanos por el origen de la semana y las opciones de
+        Precios en USD. Pregúntanos por el origen de la semana y las opciones de
         leche vegetal.
       </p>
     </section>
@@ -234,19 +234,19 @@ export const LandingPage = () => (
       <div className="landing-contact-intro">
         <span className="landing-section-kicker">TU MESA TE ESPERA</span>
         <h2>Nos vemos para un cafecito.</h2>
-        <p>Estamos en la Roma Norte. Pasa por tu bebida favorita o salúdanos.</p>
+        <p>Estamos en Capitol Hill, Seattle. Pasa por tu bebida favorita o salúdanos.</p>
       </div>
       <div className="landing-contact-details">
         <a
           className="landing-contact-item"
-          href="https://maps.google.com/?q=Colima+145%2C+Roma+Norte%2C+Ciudad+de+Mexico"
+          href="https://maps.google.com/?q=123+Brewster+Ave%2C+Seattle%2C+WA+98102"
           target="_blank"
           rel="noreferrer"
         >
           <span className="landing-contact-icon"><MapPin size={18} /></span>
           <span>
             <small>ENCUÉNTRANOS</small>
-            <strong>Colima 145, Roma Norte, CDMX</strong>
+            <strong>123 Brewster Ave, Seattle, WA 98102</strong>
           </span>
           <ArrowUpRight className="landing-contact-arrow" size={15} />
         </a>
@@ -254,21 +254,21 @@ export const LandingPage = () => (
           <span className="landing-contact-icon"><Clock3 size={18} /></span>
           <span>
             <small>HORARIO</small>
-            <strong>Lun–Vie 8:00–20:00 · Sáb–Dom 9:00–21:00</strong>
+            <strong>Lun–Vie 7:00 AM–6:00 PM · Sáb–Dom 8:00 AM–5:00 PM</strong>
           </span>
         </div>
-        <a className="landing-contact-item" href="tel:+525541627083">
+        <a className="landing-contact-item" href="tel:+12065550148">
           <span className="landing-contact-icon"><Phone size={17} /></span>
           <span>
             <small>LLÁMANOS</small>
-            <strong>+52 55 4162 7083</strong>
+            <strong>(206) 555-0148</strong>
           </span>
         </a>
-        <a className="landing-contact-item" href="mailto:hola@tuestecafe.mx">
+        <a className="landing-contact-item" href="mailto:hello@tuestecafe.example">
           <span className="landing-contact-icon"><Mail size={17} /></span>
           <span>
             <small>ESCRÍBENOS</small>
-            <strong>hola@tuestecafe.mx</strong>
+            <strong>hello@tuestecafe.example</strong>
           </span>
         </a>
       </div>

@@ -60,13 +60,13 @@ export const ControlSliders = ({ params, setParams, onSetScenario }) => {
         </div>
         <div>
           <button onClick={() => onSetScenario('hoy')} style={buttonStyle('#543d37', '#ffffff')}>
-            Hoy ($8k)
+            Hoy ($8k USD)
           </button>
           <button onClick={() => onSetScenario('agencia')} style={buttonStyle('#991b1b', '#ffffff')}>
-            Agencia ($16k -30%)
+            Agencia ($16k USD -30%)
           </button>
           <button onClick={() => onSetScenario('propuesta')} style={buttonStyle('#c27847', '#ffffff')}>
-            Propuesta Óptima ($4k)
+            Propuesta Óptima ($4k USD)
           </button>
           <button onClick={() => onSetScenario('reset')} style={buttonStyle('#f5ece1', '#543d37', '1px solid #e8ded2')}>
             Restablecer Caso
@@ -78,8 +78,8 @@ export const ControlSliders = ({ params, setParams, onSetScenario }) => {
         {/* 1. Inversión en Meta */}
         <div>
           <div style={labelContainer}>
-            <span>Inversión en Meta ($)</span>
-            <strong style={{ color: '#c27847' }}>${params.inversionMeta.toLocaleString()}</strong>
+            <span>Inversión en Meta (USD)</span>
+            <strong style={{ color: '#c27847' }}>${params.inversionMeta.toLocaleString('en-US')}</strong>
           </div>
           <input
             type="range"
@@ -95,7 +95,7 @@ export const ControlSliders = ({ params, setParams, onSetScenario }) => {
         {/* 2. Precio de la bolsa */}
         <div>
           <div style={labelContainer}>
-            <span>Precio bolsa 340g ($)</span>
+            <span>Precio bolsa 340g (USD)</span>
             <strong style={{ color: '#231714' }}>${params.precioBolsa.toFixed(2)}</strong>
           </div>
           <input
@@ -112,7 +112,7 @@ export const ControlSliders = ({ params, setParams, onSetScenario }) => {
         {/* 3. Costo del café por bolsa */}
         <div>
           <div style={labelContainer}>
-            <span>Costo café por bolsa ($)</span>
+            <span>Costo café por bolsa (USD)</span>
             <strong style={{ color: '#231714' }}>${params.costoCafeBolsa.toFixed(2)}</strong>
           </div>
           <input
@@ -129,7 +129,7 @@ export const ControlSliders = ({ params, setParams, onSetScenario }) => {
         {/* 4. Costo de Envío */}
         <div>
           <div style={labelContainer}>
-            <span>Costo de Envío ($)</span>
+            <span>Costo de Envío (USD)</span>
             <strong style={{ color: '#231714' }}>${params.costoEnvio.toFixed(2)}</strong>
           </div>
           <input
@@ -216,8 +216,8 @@ export const ControlSliders = ({ params, setParams, onSetScenario }) => {
         {/* 9. Fee Agencia */}
         <div>
           <div style={labelContainer}>
-            <span>Fee Agencia ($)</span>
-            <strong style={{ color: '#231714' }}>${params.feeAgencia.toLocaleString()}</strong>
+            <span>Fee Agencia (USD)</span>
+            <strong style={{ color: '#231714' }}>${params.feeAgencia.toLocaleString('en-US')}</strong>
           </div>
           <input
             type="range"

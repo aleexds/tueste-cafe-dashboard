@@ -4,13 +4,20 @@ import { isAuthenticated } from '../auth';
 import { DashboardPage } from '../pages/DashboardPage';
 import { LandingPage } from '../pages/LandingPage';
 import { LoginPage } from '../pages/LoginPage';
+import { CustomerPage } from '../pages/CustomerPage';
 
-const ProtectedDashboard = () => {
+const ProtectedRoute = ({ role, children }) => {
   const location = useLocation();
 
-  return isAuthenticated()
-    ? <DashboardPage />
-    : <Navigate to="/login" replace state={{ from: location }} />;
+  if (!isAuthenticated()) {
+    return <Navigate to="/login" replace state={{ from: location }} />;
+  }
+
+  if (!isAuthenticated(role)) {
+    return <Navigate to={role === 'admin' ? '/cliente' : '/dashboard'} replace />;
+  }
+
+  return children;
 };
 
 export const AppRoutes = () => {
@@ -18,7 +25,12 @@ export const AppRoutes = () => {
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/dashboard" element={<ProtectedDashboard />} />
+      <Route path="/dashboard" element={
+        <ProtectedRoute role="admin"><DashboardPage /></ProtectedRoute>
+      } />
+      <Route path="/cliente" element={
+        <ProtectedRoute role="customer"><CustomerPage /></ProtectedRoute>
+      } />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

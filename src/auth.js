@@ -1,20 +1,40 @@
 const AUTH_STORAGE_KEY = 'tueste-demo-user';
-const DEMO_USERNAME = 'ana';
-const DEMO_PASSWORD = 'anasolution';
+const DEMO_ACCOUNTS = {
+  ana: { password: 'anasolution', role: 'customer' },
+  admin: { password: 'adminsolution', role: 'admin' }
+};
 
-export const isAuthenticated = () =>
-  sessionStorage.getItem(AUTH_STORAGE_KEY) === DEMO_USERNAME;
+export const getCurrentUser = () => {
+  const storedUser = sessionStorage.getItem(AUTH_STORAGE_KEY);
+
+  if (!storedUser) return null;
+
+  try {
+    const user = JSON.parse(storedUser);
+    const account = DEMO_ACCOUNTS[user.username];
+
+    return account?.role === user.role
+      ? { username: user.username, role: user.role }
+      : null;
+  } catch {
+    return null;
+  }
+};
+
+export const isAuthenticated = (role) => {
+  const user = getCurrentUser();
+  return Boolean(user && (!role || user.role === role));
+};
 
 export const signIn = (username, password) => {
-  const isValid =
-    username.trim().toLowerCase() === DEMO_USERNAME &&
-    password === DEMO_PASSWORD;
+  const normalizedUsername = username.trim().toLowerCase();
+  const account = DEMO_ACCOUNTS[normalizedUsername];
 
-  if (isValid) {
-    sessionStorage.setItem(AUTH_STORAGE_KEY, DEMO_USERNAME);
-  }
+  if (!account || password !== account.password) return null;
 
-  return isValid;
+  const user = { username: normalizedUsername, role: account.role };
+  sessionStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
+  return user;
 };
 
 export const signOut = () => {
