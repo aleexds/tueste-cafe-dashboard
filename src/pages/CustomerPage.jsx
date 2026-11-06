@@ -7,6 +7,7 @@ import {
   CircleDollarSign,
   Coffee,
   CreditCard,
+  Gift,
   LocateFixed,
   MapPin,
   Minus,
@@ -17,11 +18,13 @@ import {
   ShoppingCart,
   MapPinned,
   LoaderCircle,
+  Mail,
   UserRound,
   X
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentUser, signOut } from '../auth';
+import { createInvitationEmailLink, getReferralStatus, REFERRAL_LEVELS } from '../referrals';
 import './CustomerPage.css';
 
 const menuItems = [
@@ -130,7 +133,15 @@ const getFeatureLabel = (feature) => {
 export const CustomerPage = () => {
   const currentUser = getCurrentUser();
   const loyaltyStorageKey = `tueste-loyalty-balance-usd-${currentUser?.username || 'customer'}`;
+  const hasOrderedStorageKey = `tueste-has-ordered-${currentUser?.username || 'customer'}`;
   const [cart, setCart] = useState({});
+  const [hasOrdered, setHasOrdered] = useState(
+    () => localStorage.getItem(hasOrderedStorageKey) === 'true'
+  );
+  const [showReferralProgress, setShowReferralProgress] = useState(false);
+  const [referralStatus, setReferralStatus] = useState(
+    () => getReferralStatus(currentUser?.username || '')
+  );
   const [loyaltyBalance, setLoyaltyBalance] = useState(() => {
     const storedBalance = Number(localStorage.getItem(loyaltyStorageKey));
     return Number.isFinite(storedBalance) ? Math.max(0, storedBalance) : 0;
@@ -159,6 +170,19 @@ export const CustomerPage = () => {
   const firstName = currentUser?.username
     ? currentUser.username.charAt(0).toUpperCase() + currentUser.username.slice(1)
     : 'Cliente';
+  const invitationPageLink = createInvitationEmailLink(currentUser?.username || '');
+  const invitationEmailSubject = 'Invita a tus amigos a Tueste y gana hasta $15';
+  const invitationEmailBody = [
+    `¡Gracias por tu pedido, ${firstName}!`,
+    '',
+    'Tu invitado recibe $3 de bienvenida al registrarse. Sube de nivel al invitar a 3, 6 y 10 personas para ganar $8, $12 y $15 en tu tarjeta de socio. Al completar los tres niveles, tu progreso comienza de nuevo.',
+    '',
+    'Abre este enlace para copiar y compartir tu invitación:',
+    invitationPageLink,
+    '',
+    'Programa de demostración: las recompensas se guardan en este navegador.'
+  ].join('\n');
+  const invitationEmailLink = `mailto:${encodeURIComponent(currentUser?.email || '')}?subject=${encodeURIComponent(invitationEmailSubject)}&body=${encodeURIComponent(invitationEmailBody)}`;
 
   const cartItems = useMemo(
     () => menuItems.filter((item) => cart[item.id]).map((item) => ({
@@ -325,6 +349,8 @@ export const CustomerPage = () => {
       (loyaltyBalance - loyaltyApplied + rewardEarned) * 100
     ) / 100;
     localStorage.setItem(loyaltyStorageKey, String(nextBalance));
+    localStorage.setItem(hasOrderedStorageKey, 'true');
+    setHasOrdered(true);
     setLoyaltyBalance(nextBalance);
     setUseLoyaltyBalance(false);
 
@@ -686,6 +712,68 @@ export const CustomerPage = () => {
               </div>
               <span className="customer-member-disclaimer">Saldo de demostración · se guarda en este navegador</span>
             </section>
+
+            {hasOrdered && (
+              <section className="customer-referral-section">
+                <button
+                  aria-expanded={showReferralProgress}
+                  aria-controls="customer-referral-progress"
+                  className="customer-referral-toggle"
+                  onClick={() => {
+                    setReferralStatus(getReferralStatus(currentUser?.username || ''));
+                    setShowReferralProgress((visible) => !visible);
+                  }}
+                  type="button"
+                >
+                  <Gift size={16} />
+                  {showReferralProgress ? 'Ocultar progreso de invitaciones' : 'Ver progreso de invitaciones'}
+                  <ArrowDownRight className={showReferralProgress ? 'customer-referral-chevron-open' : ''} size={15} />
+                </button>
+                {showReferralProgress && (
+                  <div className="customer-referral-progress" id="customer-referral-progress">
+                    <span className="customer-referral-kicker">INVITA Y GANA</span>
+                    <h2>Tu progreso, {firstName}</h2>
+                    <p>
+                      Sube de nivel y gana hasta <strong>$15</strong> en tu tarjeta. Al completar los tres,
+                      comienzas un nuevo ciclo.
+                    </p>
+                    <div className="customer-referral-current-level">
+                      <span>NIVEL {referralStatus.currentLevel.number}</span>
+                      <strong>{referralStatus.currentLevel.name}</strong>
+                      <small>Próxima recompensa: {formatPrice(referralStatus.nextRewardAmount)}</small>
+                    </div>
+                    <div className="customer-referral-progress-heading">
+                      <span>Progreso del nivel</span>
+                      <strong>{referralStatus.progressInLevel}/{referralStatus.referralsForCurrentLevel}</strong>
+                    </div>
+                    <div
+                      aria-label={`${referralStatus.progressInLevel} de ${referralStatus.referralsForCurrentLevel} registros para completar el nivel ${referralStatus.currentLevel.number}`}
+                      className="customer-referral-progress-track"
+                    >
+                      <span style={{ width: `${(referralStatus.progressInLevel * 100) / referralStatus.referralsForCurrentLevel}%` }} />
+                    </div>
+                    <div className="customer-referral-summary">
+                      <span>{referralStatus.count} {referralStatus.count === 1 ? 'persona registrada' : 'personas registradas'} en total</span>
+                      <strong>{referralStatus.earnedRewards} {referralStatus.earnedRewards === 1 ? 'nivel completado' : 'niveles completados'}</strong>
+                    </div>
+                    <div className="customer-referral-level-list">
+                      {REFERRAL_LEVELS.map((level) => (
+                        <div
+                          className={level.number === referralStatus.currentLevel.number ? 'customer-referral-level-current' : ''}
+                          key={level.number}
+                        >
+                          <span>Nivel {level.number} · {level.name}</span>
+                          <strong>{level.referrals} invitaciones · {formatPrice(level.rewardUsd)}</strong>
+                        </div>
+                      ))}
+                    </div>
+                    <a className="customer-referral-share" href={invitationPageLink}>
+                      <Gift size={14} /> Compartir mi enlace de invitación <ArrowRight size={14} />
+                    </a>
+                  </div>
+                )}
+              </section>
+            )}
           </div>
 
           <aside className="customer-cart-panel" id="carrito">
@@ -700,7 +788,13 @@ export const CustomerPage = () => {
             {orderConfirmation && (
               <div className="customer-order-success" role="status">
                 <PackageCheck size={20} />
-                <span>{orderConfirmation}</span>
+                <div className="customer-order-success-copy">
+                  <span>{orderConfirmation}</span>
+                  <a href={invitationEmailLink}>
+                    <Mail size={13} /> Preparar correo de invitación
+                  </a>
+                  <small>Se abrirá un borrador en tu app de correo; tendrás que enviarlo.</small>
+                </div>
                 <button aria-label="Cerrar confirmación" onClick={() => setOrderConfirmation('')} type="button">
                   <X size={15} />
                 </button>

@@ -131,6 +131,10 @@
   font-weight: 700;
 }
 
+.login-form > .login-email-label {
+  margin-top: 17px;
+}
+
 .login-input-wrap {
   display: flex;
   min-height: 48px;
@@ -224,6 +228,37 @@
 .login-submit:hover {
   transform: translateY(-1px);
   background: #493126;
+}
+
+.login-submit:disabled {
+  cursor: wait;
+  opacity: 0.75;
+  transform: none;
+}
+
+.login-mode-switch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 17px;
+  color: #786f67;
+  font-size: 9px;
+}
+
+.login-mode-switch button {
+  padding: 3px;
+  border: 0;
+  background: transparent;
+  color: var(--login-rust);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+}
+
+.login-mode-switch button:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .login-demo-note {

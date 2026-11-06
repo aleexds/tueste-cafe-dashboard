@@ -1015,8 +1015,29 @@
   flex: 0 0 auto;
 }
 
-.customer-order-success > span {
+.customer-order-success-copy {
+  display: flex;
   flex: 1;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.customer-order-success-copy > a {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 5px;
+  color: #45633f;
+  font-size: 8px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.customer-order-success-copy > small {
+  color: #687e62;
+  font-size: 7px;
+  line-height: 1.5;
 }
 
 .customer-order-success > button {
@@ -1304,6 +1325,208 @@
   margin-top: 12px;
   color: #bda996;
   font-size: 7px;
+}
+
+.customer-referral-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.customer-referral-toggle {
+  display: flex;
+  width: 100%;
+  min-height: 43px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border: 1px solid #e3d7c9;
+  background: #f7f2eb;
+  color: var(--customer-rust);
+  cursor: pointer;
+  font: inherit;
+  font-size: 9px;
+  font-weight: 700;
+  text-align: left;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+
+.customer-referral-toggle:hover,
+.customer-referral-toggle[aria-expanded='true'] {
+  border-color: #c9a58a;
+  background: #f2e9df;
+}
+
+.customer-referral-toggle > svg:first-child {
+  flex: 0 0 auto;
+}
+
+.customer-referral-toggle > svg:last-child {
+  margin-left: auto;
+  transition: transform 160ms ease;
+}
+
+.customer-referral-chevron-open {
+  transform: rotate(45deg);
+}
+
+.customer-referral-progress {
+  padding: 17px;
+  border: 1px solid var(--customer-line);
+  background: #fff;
+}
+
+.customer-referral-kicker {
+  color: var(--customer-rust);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1.15px;
+}
+
+.customer-referral-progress h2 {
+  margin: 6px 0 5px;
+  color: #3d3027;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.customer-referral-progress > p {
+  margin: 0;
+  color: #81766c;
+  font-size: 8px;
+  line-height: 1.7;
+}
+
+.customer-referral-progress > p strong {
+  color: var(--customer-rust);
+}
+
+.customer-referral-current-level {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 5px 9px;
+  margin-top: 13px;
+  padding: 10px 11px;
+  border: 1px solid #e8e1d7;
+  background: #f7f2eb;
+}
+
+.customer-referral-current-level > span {
+  grid-row: span 2;
+  color: var(--customer-rust);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+}
+
+.customer-referral-current-level > strong {
+  color: #51453b;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 12px;
+}
+
+.customer-referral-current-level > small {
+  color: #83776b;
+  font-size: 7px;
+}
+
+.customer-referral-progress-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 14px;
+  color: #51463c;
+  font-size: 8px;
+}
+
+.customer-referral-progress-heading strong {
+  color: var(--customer-rust);
+}
+
+.customer-referral-progress-track {
+  height: 6px;
+  overflow: hidden;
+  margin-top: 8px;
+  border-radius: 6px;
+  background: #eee7de;
+}
+
+.customer-referral-progress-track > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #a85e3b;
+  transition: width 180ms ease;
+}
+
+.customer-referral-summary {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 7px 12px;
+  margin-top: 8px;
+  color: #81766c;
+  font-size: 7px;
+}
+
+.customer-referral-summary strong {
+  color: #55744d;
+}
+
+.customer-referral-level-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.customer-referral-level-list > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 8px;
+  border: 1px solid #eee8df;
+  color: #81766c;
+  font-size: 7px;
+}
+
+.customer-referral-level-list > .customer-referral-level-current {
+  border-color: #d7bca6;
+  background: #fcfaf6;
+  color: #51453b;
+}
+
+.customer-referral-level-list strong {
+  color: var(--customer-rust);
+  font-size: 7px;
+  text-align: right;
+}
+
+.customer-referral-share {
+  display: flex;
+  min-height: 37px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 14px;
+  padding: 0 10px;
+  background: #30221b;
+  color: #fffaf3 !important;
+  font-size: 8px;
+  font-weight: 700;
+  transition: background 160ms ease;
+}
+
+.customer-referral-share:hover {
+  background: #493126;
+}
+
+.customer-referral-share svg:last-child {
+  margin-left: auto;
 }
 
 .customer-footer {
