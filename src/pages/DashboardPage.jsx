@@ -1,4 +1,6 @@
 import { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { signOut } from '../auth';
 import { MetricCards } from '../components/MetricCards';
 import { ControlSliders } from '../components/ControlSliders';
 import { ChartsSection } from '../components/ChartsSection';
@@ -17,6 +19,7 @@ const HISTORIAL_META = [
 const FRECUENCIAS_SUELTOS = [0, 1.0, 0.15, 0.20, 0.20, 0.20, 0.20, 0.20, 0.15, 0.15, 0.15, 0.20, 0.20];
 
 export const DashboardPage = () => {
+  const navigate = useNavigate();
   const [params, setParams] = useState({
     inversionMeta: 8000,
     precioBolsa: 17.0,
@@ -221,15 +224,36 @@ export const DashboardPage = () => {
             </span>
           </div>
         </div>
-        <div style={{
-          fontSize: '0.8rem',
-          backgroundColor: 'rgba(255,255,255,0.08)',
-          padding: '0.4rem 0.9rem',
-          borderRadius: '9999px',
-          border: '1px solid rgba(194, 120, 71, 0.4)',
-          color: '#e8ded2'
-        }}>
-          Direct-to-Consumer (DTC) Model
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <div style={{
+            fontSize: '0.8rem',
+            backgroundColor: 'rgba(255,255,255,0.08)',
+            padding: '0.4rem 0.9rem',
+            borderRadius: '9999px',
+            border: '1px solid rgba(194, 120, 71, 0.4)',
+            color: '#e8ded2'
+          }}>
+            Direct-to-Consumer (DTC) Model
+          </div>
+          <button
+            onClick={() => {
+              signOut();
+              navigate('/login', { replace: true });
+            }}
+            style={{
+              backgroundColor: 'transparent',
+              border: '1px solid rgba(194, 120, 71, 0.4)',
+              borderRadius: '9999px',
+              color: '#e8ded2',
+              cursor: 'pointer',
+              font: 'inherit',
+              fontSize: '0.75rem',
+              padding: '0.4rem 0.8rem'
+            }}
+            type="button"
+          >
+            Cerrar sesión
+          </button>
         </div>
       </nav>
 

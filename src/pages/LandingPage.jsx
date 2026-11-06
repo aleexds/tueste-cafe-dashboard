@@ -7,7 +7,8 @@ import {
   Mail,
   MapPin,
   Phone,
-  Star
+  Star,
+  UserRound
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import './LandingPage.css';
@@ -82,9 +83,14 @@ export const LandingPage = () => (
         <a href="#visitanos">Encuéntranos</a>
       </nav>
 
-      <a className="landing-nav-cta" href="#visitanos">
-        Ven a visitarnos <ArrowUpRight size={16} />
-      </a>
+      <div className="landing-header-actions">
+        <Link className="landing-login-link" to="/login">
+          <UserRound size={15} /> Iniciar sesión
+        </Link>
+        <a className="landing-nav-cta" href="#visitanos">
+          Ven a visitarnos <ArrowUpRight size={16} />
+        </a>
+      </div>
     </header>
 
     <section className="landing-hero">
